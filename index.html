@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>App</title>
+    <script src="data/operations.js"></script>
+    <script src="data/autocomplete.js"></script>
+    <script src="js/jquery-1.10.1.min.js"></script>
+    <script src="js/jquery-jtemplates.js"></script>
+    <script src="js/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="js/bootstrap/css/bootstrap.min.css"/>
+    <script>
+    $(document).ready(function(){
+        $('.autocomplete').typeahead({source: autocomplete});
+        var resultSickness, resultOperations = [];
+
+        $('.btn-primary').click(function(e){
+            e.preventDefault();
+
+            resultSickness = [];
+            resultOperations = [];
+
+            var searchText = $('.input-block-level').val();
+
+            for (var key in operations){
+
+                if (operations[key].name.indexOf(searchText) + 1 || operations[key].codeMKB9.indexOf(searchText) + 1){
+
+                    resultOperations.push(operations[key]);
+
+                }
+                for (var sicknessKey in operations.sickness){
+                    if (operations[key].name.indexOf(searchText) + 1){
+                        resultSickness.push({
+                            operation: operations[key],
+                            data: operations.sickness[sicknessKey]
+                        });
+                    }
+                }
+            }
+
+
+           // console.log(resultOperations);
+            //$('.result').html(searchText);
+            $("#operations_output").setTemplateElement("Template-operation");
+            $("#operations_output").processTemplate(resultOperations);
+
+        });
+
+    });
+
+    </script>
+</head>
+<body>
+<!-- Templates -->
+<p style="display:none"><textarea id="Template-operation" rows="0" cols="0"><!--
+{*
+Main template
+*}
+{#template MAIN}
+{#if $T.length < 1}
+    Операции не найдены
+{#else}
+<h2>Найдено операций: {$T.length}</h2>
+<ul>
+  {#foreach $T as operation}
+	<li>
+	    <strong>{$T.operation.codeMKB9} {$T.operation.name}</strong>
+	    <p>Болезни привязанные к операции:</p>
+	    <ul>
+	        {#foreach $T.operation.sickness as sickness}
+	            <li>{$T.sickness.codeMKB10} {$T.sickness.name}</li>
+	        {#/for}
+	    </ul>
+	</li>
+  {#/for}
+</ul>
+{#/if}
+{#/template MAIN}
+  --></textarea></p>
+<div class="container">
+    <form class="form-signin">
+        <h2 class="form-signin-heading">Поиск по привязкам.</h2>
+        <p>Приложение 39
+            к приказу
+            и. о. Министра здравоохранения Республики Казахстан
+            от 30 марта 2012 года №197
+            Приложение 7
+            к приказу Министра здравоохранения
+            Республики Казахстан
+            от « 13» января 2012 года № 13 	</p>
+        <input type="text" class="input-block-level autocomplete" placeholder="код, название операции/болезни">
+        <button class="btn btn-large btn-primary">Искать</button>
+        <div class="result">
+            <div id="operations_output"></div>
+            <div id="sickness_output"></div>
+        </div>
+    </form>
+</div> <!-- /container -->
+
+</body>
+</html>
