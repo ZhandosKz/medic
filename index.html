@@ -9,6 +9,7 @@
     <script src="js/jquery-jtemplates.js"></script>
     <script src="js/bootstrap/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="js/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/main.css"/>
     <script>
     $(document).ready(function(){
         $('.autocomplete').typeahead({source: autocomplete});
@@ -29,21 +30,26 @@
                     resultOperations.push(operations[key]);
 
                 }
-                for (var sicknessKey in operations.sickness){
-                    if (operations[key].name.indexOf(searchText) + 1){
+                for (var sicknessKey in operations[key].sickness){
+
+                    if (operations[key].sickness[sicknessKey].name.indexOf(searchText) + 1 || operations[key].sickness[sicknessKey].codeMKB10.indexOf(searchText) + 1){
                         resultSickness.push({
                             operation: operations[key],
-                            data: operations.sickness[sicknessKey]
+                            data: operations[key].sickness[sicknessKey]
                         });
                     }
                 }
             }
 
+            console.log(resultSickness)
 
            // console.log(resultOperations);
             //$('.result').html(searchText);
             $("#operations_output").setTemplateElement("Template-operation");
-            $("#operations_output").processTemplate(resultOperations);
+            $("#operations_output").processTemplate({
+                operations: resultOperations,
+                sickness: resultSickness
+            });
 
         });
 
@@ -58,23 +64,52 @@
 Main template
 *}
 {#template MAIN}
-{#if $T.length < 1}
+{#if $T.operations.length < 1}
     Операции не найдены
 {#else}
-<h2>Найдено операций: {$T.length}</h2>
-<ul>
-  {#foreach $T as operation}
-	<li>
-	    <strong>{$T.operation.codeMKB9} {$T.operation.name}</strong>
-	    <p>Болезни привязанные к операции:</p>
-	    <ul>
-	        {#foreach $T.operation.sickness as sickness}
-	            <li>{$T.sickness.codeMKB10} {$T.sickness.name}</li>
-	        {#/for}
-	    </ul>
-	</li>
-  {#/for}
-</ul>
+    <h2>Найдено операций: {$T.operations.length}</h2>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Код операции, название операции</th>
+                <th>Код болезни, название болезни</th>
+            </tr>
+        </thead>
+        <tbody>
+            {#foreach $T.operations as operation}
+                <tr>
+                    <td class="operation-column">{$T.operation.codeMKB9} {$T.operation.name}</td>
+                    <td>
+                        {#foreach $T.operation.sickness as sickness}
+                            {$T.sickness.codeMKB10} {$T.sickness.name}<br/>
+                        {#/for}
+                    </td>
+                </tr>
+            {#/for}
+        </tbody>
+    </table>
+{#/if}
+
+{#if $T.sickness.length < 1}
+    Болезни не найдены
+{#else}
+    <h2>Найдено болезней: {$T.sickness.length}</h2>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Код болезни, название болезни</th>
+                <th>Код операции, название операции</th>
+            </tr>
+        </thead>
+        <tbody>
+            {#foreach $T.sickness as sickness}
+                <tr>
+                    <td>{$T.sickness.data.codeMKB10} {$T.sickness.data.name}</td>
+                    <td>{$T.sickness.operation.codeMKB9} {$T.sickness.operation.name}</td>
+                </tr>
+            {#/for}
+        </tbody>
+    </table>
 {#/if}
 {#/template MAIN}
   --></textarea></p>
