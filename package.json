@@ -1,4 +1,12 @@
 {
     "name": "medic-codes",
-    "main": "index.html"
+    "main": "index.html",
+    "window": {
+        "toolbar": false,
+        "width": 1000,
+        "height": 800,
+        "position": "mouse",
+        "min_width": 1000,
+        "min_height": 800
+    }
 }
