@@ -113,25 +113,35 @@ Main template
 {#/if}
 {#/template MAIN}
   --></textarea></p>
-<div class="container">
-    <form class="form-signin">
-        <h2 class="form-signin-heading">Поиск по привязкам.</h2>
-        <p>Приложение 39
-            к приказу
-            и. о. Министра здравоохранения Республики Казахстан
-            от 30 марта 2012 года №197
-            Приложение 7
-            к приказу Министра здравоохранения
-            Республики Казахстан
-            от « 13» января 2012 года № 13 	</p>
-        <input type="text" class="input-block-level autocomplete" placeholder="код, название операции/болезни">
-        <button class="btn btn-large btn-primary">Искать</button>
-        <div class="result">
-            <div id="operations_output"></div>
-            <div id="sickness_output"></div>
-        </div>
-    </form>
-</div> <!-- /container -->
+<div id="wrap">
+    <div class="container">
+        <form class="form-signin">
+            <h2 class="form-signin-heading">Поиск по привязкам.</h2>
+            <p>Приложение 39
+                к приказу
+                и. о. Министра здравоохранения Республики Казахстан
+                от 30 марта 2012 года №197
+                Приложение 7
+                к приказу Министра здравоохранения
+                Республики Казахстан
+                от « 13» января 2012 года № 13 	</p>
+            <input type="text" class="input-block-level autocomplete" placeholder="код, название операции/болезни">
+            <button class="btn btn-large btn-primary">Искать</button>
+            <div class="result">
+                <div id="operations_output"></div>
+                <div id="sickness_output"></div>
+            </div>
+        </form>
+    </div> <!-- /container -->
+    <div id="push"></div>
+</div>
 
+<div id="footer">
+    <div class="container">
+        technologies: <a href="https://github.com/rogerwang/node-webkit" target="_blank">node-webkit</a>, <a href="https://github.com/jquery/jquery" target="_blank">jquery</a>, <a href="http://twitter.github.io/bootstrap" target="_blank">twitter-bootstrap</a>, <a href="https://github.com/superfoght/jTemplate" target="_blank">jtemplates</a><br/>
+        idea&development: <a href="mailto:zhandos.90@gmail.com">nurplus</a><br/>
+        code licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License v2.0</a>, <a href="https://github.com/ZhandosKz/medic">sources</a>
+    </div>
+</div>
 </body>
 </html>
