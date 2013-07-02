@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>App</title>
+    <title>Медицинские привязки</title>
     <script src="data/operations.js"></script>
     <script src="data/autocomplete.js"></script>
     <script src="js/jquery-1.10.1.min.js"></script>
@@ -11,11 +11,13 @@
     <link rel="stylesheet" href="js/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/main.css"/>
     <script>
+    var gui = require('nw.gui');
+    var clipboard = gui.Clipboard.get();
     $(document).ready(function(){
         $('.autocomplete').typeahead({source: autocomplete});
         var resultSickness, resultOperations = [];
 
-        $('.btn-primary').click(function(e){
+        $('.form-signin').submit(function(e){
             e.preventDefault();
 
             resultSickness = [];
@@ -41,10 +43,7 @@
                 }
             }
 
-            console.log(resultSickness)
 
-           // console.log(resultOperations);
-            //$('.result').html(searchText);
             $("#operations_output").setTemplateElement("Template-operation");
             $("#operations_output").processTemplate({
                 operations: resultOperations,
@@ -52,8 +51,51 @@
             });
 
         });
-
+        initContextMenu();
     });
+
+    function initContextMenu() {
+        var menu = new gui.Menu();
+        var inputMenu = new gui.Menu();
+
+        var copyMenuItem = new gui.MenuItem({
+            label: 'Копировать',
+            click: function() {
+                clipboard.set(document.getSelection().toString());
+            }
+        });
+
+        menu.append(copyMenuItem);
+        inputMenu.append(copyMenuItem);
+
+        menu.append(new gui.MenuItem({
+            label: 'Искать выдленное',
+            click: function() {
+                $('.autocomplete').val(document.getSelection().toString());
+                $('.form-signin').submit();
+            }
+        }));
+
+        inputMenu.append(new gui.MenuItem({
+            label: 'Вставить и искать',
+            click: function() {
+                $('.autocomplete').val(clipboard.get());
+                $('.form-signin').submit();
+            }
+        }));
+
+        $('body').not('.autocomplete').bind('contextmenu', function(e){
+            e.preventDefault();
+            menu.popup(e.pageX, e.pageY);
+            return false;
+        });
+
+        $('.autocomplete').bind('contextmenu', function(e){
+            e.preventDefault();
+            inputMenu.popup(e.pageX, e.pageY);
+            return false;
+        });
+    }
 
     </script>
 </head>
@@ -138,8 +180,8 @@ Main template
 
 <div id="footer">
     <div class="container">
-        technologies: <a href="https://github.com/rogerwang/node-webkit" target="_blank">node-webkit</a>, <a href="https://github.com/jquery/jquery" target="_blank">jquery</a>, <a href="http://twitter.github.io/bootstrap" target="_blank">twitter-bootstrap</a>, <a href="https://github.com/superfoght/jTemplate" target="_blank">jtemplates</a><br/>
         idea&development: <a href="mailto:zhandos.90@gmail.com">nurplus</a><br/>
+        technologies: <a href="https://github.com/rogerwang/node-webkit" target="_blank">node-webkit</a>, <a href="https://github.com/jquery/jquery" target="_blank">jquery</a>, <a href="http://twitter.github.io/bootstrap" target="_blank">twitter-bootstrap</a>, <a href="https://github.com/superfoght/jTemplate" target="_blank">jtemplates</a><br/>
         code licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License v2.0</a>, <a href="https://github.com/ZhandosKz/medic">sources</a>
     </div>
 </div>

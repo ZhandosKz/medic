@@ -1,7 +1,11 @@
 {
     "name": "medic-codes",
+    "version": "1.0",
+    "description": "Поиск привязок операций и болезней",
     "main": "index.html",
     "window": {
+        "title": "Медицинские привязки",
+        "icon": "icon.png",
         "toolbar": false,
         "width": 1000,
         "height": 800,
